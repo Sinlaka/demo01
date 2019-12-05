@@ -10,6 +10,7 @@ class XiaojiejieItem extends Component {
     }
 
     render() {
+        console.log('child--render')
         //tip:key={this.props.key} 写这里会报错，这里直接用this.handerClick.bind(this)，也会报错
         return (
             <li onClick={this.handerClick}>
@@ -18,19 +19,35 @@ class XiaojiejieItem extends Component {
         )
     }
 
-    //1.组件第一次存在于dom中，函数不会被执行
-    //如果已经存在于dom中，函数财被执行
-    componentWillReceiveProps(nextProps, nextContext) {
-        console.log('componentWillReceiveProps--子组件接收到父组件传递过来的参数，父组件render函数重新被执行，这个生命周期就会被执行。')
+    /**
+     *
+     * @param nextProps:变化后属性
+     * @param nextState：变化后状态
+     * @param nextContext
+     * @returns {boolean}
+     */
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        if (nextProps.content !== this.props.content) {
+            return true;
+        } else {
+            return false;
+        }
+        return false;
     }
 
-    componentWillUnmount() {
-        console.log('componentWillUnmount--组件将要被删除之前执行')
-    }
+    //1.组件第一次存在于dom中，函数不会被执行
+    //如果已经存在于dom中，函数财被执行
+    // componentWillReceiveProps(nextProps, nextContext) {
+    //     console.log('componentWillReceiveProps--子组件接收到父组件传递过来的参数，父组件render函数重新被执行，这个生命周期就会被执行。')
+    // }
+    //
+    // componentWillUnmount() {
+    //     console.log('componentWillUnmount--组件将要被删除之前执行')
+    // }
 
     handerClick() {
         this.props.delItem(this.props.index)
-        console.log(this.props.list)
+        // console.log(this.props.list)
     }
 }
 
@@ -46,7 +63,7 @@ XiaojiejieItem.defaultProps = {
 
 export default XiaojiejieItem
 
-//tip:单项数据流：父组件给子组件传递的属性，是不可以在子组件里修改的，是只读的
+// tip:单项数据流：父组件给子组件传递的属性，是不可以在子组件里修改的，是只读的
 // 函数式编程的好处是什么
 // 函数式编程让我们的代码更清晰，每个功能都是一个函数。
 // 函数式编程为我们的代码测试代理了极大的方便，更容易实现前端自动化测试。
